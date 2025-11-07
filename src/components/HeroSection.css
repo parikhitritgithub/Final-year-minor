@@ -1,0 +1,247 @@
+.hero {
+  padding: 80px 0 120px;
+  position: relative;
+  overflow: hidden;
+  background: 
+    /* Grid background */
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    /* Base gradient */
+    linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+  background-size: 50px 50px, 50px 50px, 100% 100%;
+}
+
+/* Starfield animation */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 200px 60px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(2px 2px at 240px 90px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 280px 40px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 320px 70px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 360px 20px, rgba(255, 255, 255, 0.5), transparent);
+  background-repeat: repeat;
+  background-size: 400px 400px;
+  animation: twinkle 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Additional smaller stars */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(1px 1px at 50px 100px, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 80px 150px, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 120px 200px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 150px 250px, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 180px 300px, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 220px 350px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 250px 400px, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 280px 450px, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 320px 500px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 350px 550px, rgba(255, 255, 255, 0.4), transparent);
+  background-repeat: repeat;
+  background-size: 400px 400px;
+  animation: twinkle 12s ease-in-out infinite alternate-reverse;
+  pointer-events: none;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.hero-content {
+  display: grid;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.hero-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 40px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.demo-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 400px;
+  position: relative;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.demo-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.demo-label {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.demo-prompt {
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.demo-model {
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.demo-model img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.demo-arrow {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; transform: translateY(-50%) translateX(0); }
+  50% { opacity: 0.8; transform: translateY(-50%) translateX(5px); }
+}
+
+@media (min-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+  
+  .hero-title {
+    font-size: 56px;
+  }
+  
+  .hero-buttons {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-title {
+    font-size: 64px;
+  }
+  
+  .hero::before,
+  .hero::after {
+    background-size: 600px 600px;
+  }
+}
