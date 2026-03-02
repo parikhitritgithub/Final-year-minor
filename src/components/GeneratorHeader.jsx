@@ -16,6 +16,10 @@ function GeneratorHeader() {
           
           <h1 className="page-title">Text to 3D Generator</h1>
           
+          <Link to="/history" className="back-btn">
+            History
+          </Link>
+
           <Link to="/" className="back-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 12H5M12 19L5 12L12 5"/>
