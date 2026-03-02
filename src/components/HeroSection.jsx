@@ -43,7 +43,7 @@ function HeroSection() {
               </div>
               <div className="demo-model">
                 <img 
-                  src="/assets/Screenshot 2025-11-07 155317-Picsart-AiImageEnhancer.png"
+                  src="../assets/Screenshot 2025-11-07 155317-Picsart-AiImageEnhancer.png"
                   alt="3D wizard character model"
                   width="975"
                   height="650"
