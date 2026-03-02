@@ -23,6 +23,8 @@ export default function Register(){
         email,
         password
       });
+      
+      alert("Account created successfully!");
 
       navigate("/login");
 
