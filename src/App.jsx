@@ -22,6 +22,7 @@ import GeneratorPage from "./components/GeneratorPage";
 import History from "./pages/History";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import ImageTo3DPage from "./components/ImageTo3DPage";
 
 function App() {
 
@@ -41,6 +42,15 @@ function App() {
           element={
             <ProtectedRoute>
               <GeneratorPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/image-to-3d"
+          element={
+            <ProtectedRoute>
+              <ImageTo3DPage />
             </ProtectedRoute>
           }
         />
