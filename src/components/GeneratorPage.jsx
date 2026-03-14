@@ -26,7 +26,8 @@ export default function GeneratorPage() {
       console.log("Sending request:", prompt);
 
       const response = await fetch(
-        "https://agnatic-nontangibly-boyce.ngrok-free.dev/generate",
+        // "https://agnatic-nontangibly-boyce.ngrok-free.dev/generate",
+        "https://nonoptimistical-ascetically-xenia.ngrok-free.dev/generate",
         { method: "POST", body: formData }
       );
 
