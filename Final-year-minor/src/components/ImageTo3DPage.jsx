@@ -10,9 +10,9 @@ import "./GeneratorPage.css";
 
 export default function ImageTo3DPage() {
 
-  const SHAPE_API ="https://nonoptimistical-ascetically-xenia.ngrok-free.dev";
-  const TRIPO_API ="https://e4f1-213-173-108-219.ngrok-free.app";
-  const EVAL_API ="https://191b-106-202-47-105.ngrok-free.app";
+  const SHAPE_API = "https://nonoptimistical-ascetically-xenia.ngrok-free.dev";
+  const TRIPO_API = "https://e4f1-213-173-108-219.ngrok-free.app";
+  const EVAL_API = "https://191b-106-202-47-105.ngrok-free.app";
 
   const [image, setImage] = useState(null);
   const [detailLevel, setDetailLevel] = useState("Med");
@@ -62,16 +62,36 @@ export default function ImageTo3DPage() {
         });
 
         // Evaluate
-        const evalForm = new FormData();
-        evalForm.append("file", objBlob, "model.obj");
+        // const evalForm = new FormData();
+        // evalForm.append("file", objBlob, "model.obj");
 
-        const evalRes = await fetch(`${EVAL_API}/evaluate`, {
-          method: "POST",
-          body: evalForm,
-        });
+        // const evalRes = await fetch(`${EVAL_API}/evaluate`, {
+        //   method: "POST",
+        //   body: evalForm,
+        // });
 
-        const evalData = await evalRes.json();
-        setMetrics(evalData);
+        // const evalData = await evalRes.json();
+        // setMetrics(evalData);
+
+        // 🔥 Evaluate (safe)
+        try {
+          const evalForm = new FormData();
+          evalForm.append("file", objBlob, "model.obj");
+
+          const evalRes = await fetch(`${EVAL_API}/evaluate`, {
+            method: "POST",
+            body: evalForm,
+          });
+
+          if (evalRes.ok) {
+            const evalData = await evalRes.json();
+            setMetrics(evalData);
+          } else {
+            console.warn("Evaluation failed");
+          }
+        } catch (e) {
+          console.warn("Evaluation error:", e);
+        }
       }
 
       if (textureQuality === "4K") {

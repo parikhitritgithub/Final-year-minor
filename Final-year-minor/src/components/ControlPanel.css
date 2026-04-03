@@ -206,3 +206,69 @@
   object-fit: contain;
   border-radius: 8px;
 }
+
+.model-card {
+  background: #111;
+  padding: 15px;
+  border-radius: 12px;
+  color: white;
+}
+
+.model-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.model-info {
+  margin-top: 10px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0;
+  font-size: 13px;
+}
+
+.highlight {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.green {
+  color: #10b981;
+}
+
+.gray {
+  color: #888;
+}
+
+/* toggle */
+.toggle-switch {
+  width: 45px;
+  height: 24px;
+  background: #444;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle-switch.active {
+  background: #10b981;
+}
+
+.toggle-circle {
+  width: 20px;
+  height: 20px;
+  background: white;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggle-switch.active .toggle-circle {
+  transform: translateX(21px);
+}
