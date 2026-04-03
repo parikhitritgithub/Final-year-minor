@@ -1,0 +1,416 @@
+/* ===========================
+   GENERATOR PAGE BASE
+   =========================== */
+
+.generator-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.generator-main {
+  flex: 1;
+  padding: 30px 0;
+}
+
+.generator-workspace {
+  display: grid;
+  gap: 32px;
+  min-height: 600px;
+}
+
+@media (min-width: 1024px) {
+  .generator-workspace {
+    grid-template-columns: 400px 1fr;
+    gap: 40px;
+  }
+}
+
+/* ===========================
+   PREVIEW WRAPPER
+   Wraps PreviewPanel + MetricsOverlay
+   =========================== */
+
+.preview-wrapper {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make sure PreviewPanel fills the wrapper completely */
+.preview-wrapper > :first-child {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ===========================
+   METRICS OVERLAY
+   =========================== */
+
+.metrics-overlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 280px;
+  background: rgba(15, 15, 20, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 20;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  animation: metricsSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
+}
+
+.metrics-overlay.metrics-collapsed {
+  width: 200px;
+}
+
+@keyframes metricsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===========================
+   METRICS HEADER
+   =========================== */
+
+.metrics-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.2s ease;
+}
+
+.metrics-overlay-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.metrics-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metrics-icon {
+  width: 16px;
+  height: 16px;
+  color: #a78bfa;
+}
+
+.metrics-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: 0.02em;
+}
+
+.metrics-toggle-btn {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metrics-chevron {
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+  transition: transform 0.3s ease;
+}
+
+.chevron-down {
+  transform: rotate(180deg);
+}
+
+.chevron-up {
+  transform: rotate(0deg);
+}
+
+/* ===========================
+   METRICS BODY
+   =========================== */
+
+.metrics-overlay-body {
+  padding: 16px;
+  animation: metricsFadeIn 0.3s ease;
+}
+
+@keyframes metricsFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===========================
+   SCORE RING
+   =========================== */
+
+.metrics-score-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.metrics-score-ring {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.score-progress {
+  transition: stroke-dasharray 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.score-value {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  z-index: 1;
+  margin-top: -4px;
+}
+
+.score-label {
+  position: absolute;
+  bottom: 8px;
+  font-size: 9px;
+  font-weight: 500;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 1;
+}
+
+/* ===========================
+   METRIC CARDS
+   =========================== */
+
+.metrics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.metric-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(2px);
+}
+
+/* ===========================
+   CARD ICONS
+   =========================== */
+
+.metric-card-icon {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(167, 139, 250, 0.12);
+  color: #a78bfa;
+}
+
+.metric-card-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.vertices-icon {
+  background: rgba(99, 102, 241, 0.12);
+  color: #818cf8;
+}
+
+.faces-icon {
+  background: rgba(236, 72, 153, 0.12);
+  color: #f472b6;
+}
+
+/* ===========================
+   CARD INFO
+   =========================== */
+
+.metric-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.metric-card-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.metric-card-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f1f5f9;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===========================
+   PROGRESS BAR (Normal Consistency)
+   =========================== */
+
+.metric-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.metric-bar-track {
+  flex: 1;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.metric-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.metric-card-value-inline {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===========================
+   QUALITY BADGE
+   =========================== */
+
+.metric-badge {
+  display: inline-block;
+  width: fit-content;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border: 1px solid;
+  border-radius: 100px;
+  margin-top: 3px;
+}
+
+/* ===========================
+   RESPONSIVE - Mobile
+   =========================== */
+
+@media (max-width: 1023px) {
+  .preview-wrapper {
+    min-height: 400px;
+  }
+
+  .metrics-overlay {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    margin-top: 16px;
+    border-radius: 12px;
+  }
+
+  .metrics-overlay.metrics-collapsed {
+    width: 100%;
+  }
+
+  .preview-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics-overlay {
+    border-radius: 10px;
+  }
+
+  .metrics-overlay-body {
+    padding: 12px;
+  }
+
+  .metric-card {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+
+  .metric-card-icon {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+  }
+
+  .metric-card-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .metric-card-value {
+    font-size: 14px;
+  }
+
+  .metrics-score-ring {
+    width: 70px;
+    height: 70px;
+  }
+
+  .score-value {
+    font-size: 18px;
+  }
+}
