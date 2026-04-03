@@ -1,0 +1,41 @@
+/* src/pages/BenchmarkDashboardPage.css */
+.benchmark-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+}
+
+.benchmark-main {
+  padding: 30px 0;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.benchmark-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.back-to-generator, .new-generation-btn {
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+}
+
+.new-generation-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+}
+
+.benchmark-loading {
+  text-align: center;
+  padding: 100px;
+  color: white;
+}

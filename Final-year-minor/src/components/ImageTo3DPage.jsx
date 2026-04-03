@@ -1,17 +1,18 @@
+// src/components/ImageTo3DPage.jsx (simplified - remove BenchmarkDashboard)
 import React, { useState } from "react";
 import GeneratorHeader from "./GeneratorHeader";
 import ImageControlPanel from "./ImageControlPanel";
 import PreviewPanel from "./PreviewPanel";
 import GeneratorFooter from "./GeneratorFooter";
 import MetricsOverlay from "./MetricsOverlay";
-import BenchmarkDashboard from "./BenchmarkDashboard";
+// Remove: import BenchmarkDashboard from "./BenchmarkDashboard";
 import "./GeneratorPage.css";
 
 export default function ImageTo3DPage() {
 
   const SHAPE_API ="https://nonoptimistical-ascetically-xenia.ngrok-free.dev";
   const TRIPO_API ="https://e4f1-213-173-108-219.ngrok-free.app";
-  const EVAL_API ="https://ecab-106-202-47-105.ngrok-free.app";
+  const EVAL_API ="https://191b-106-202-47-105.ngrok-free.app";
 
   const [image, setImage] = useState(null);
   const [detailLevel, setDetailLevel] = useState("Med");
@@ -21,6 +22,7 @@ export default function ImageTo3DPage() {
   const [metrics, setMetrics] = useState(null);
 
   const handleGenerate = async () => {
+    // ... (keep your existing generate logic)
     if (!image || !image.file) {
       alert("Please upload an image first.");
       return;
@@ -152,8 +154,7 @@ export default function ImageTo3DPage() {
             </div>
           </div>
 
-          {/* Benchmark Dashboard (below workspace) */}
-          <BenchmarkDashboard metrics={metrics} evalApi={EVAL_API} />
+          {/* REMOVED: BenchmarkDashboard component */}
 
         </div>
       </main>

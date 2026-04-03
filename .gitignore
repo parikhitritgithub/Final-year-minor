@@ -81,6 +81,8 @@ coverage/
 
 server/node_modules/
 server/.env
+__pycache__/
+*.pyc
 
 # =========================
 

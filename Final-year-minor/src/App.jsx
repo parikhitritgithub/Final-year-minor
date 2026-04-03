@@ -1,25 +1,11 @@
-// import React from 'react'
-// import { Routes, Route } from 'react-router-dom'
-// import LandingPage from './components/LandingPage'
-// import GeneratorPage from './components/GeneratorPage'
-
-// function App() {
-//   return (
-//     <Routes>
-//       <Route path="/" element={<LandingPage />} />
-//       <Route path="/generator" element={<GeneratorPage />} />
-//     </Routes>
-//   )
-// }
-
-// export default App
-
+// src/App.jsx
 import { Routes, Route} from "react-router-dom";
 import LandingPage from './components/LandingPage'
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import GeneratorPage from "./components/GeneratorPage";
 import History from "./pages/History";
+import BenchmarkDashboardPage from "./pages/BenchmarkDashboardPage"; // Add this import
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import ImageTo3DPage from "./components/ImageTo3DPage";
@@ -51,6 +37,16 @@ function App() {
           element={
             <ProtectedRoute>
               <ImageTo3DPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* NEW: Protected Benchmark Dashboard */}
+        <Route
+          path="/benchmark"
+          element={
+            <ProtectedRoute>
+              <BenchmarkDashboardPage />
             </ProtectedRoute>
           }
         />

@@ -23,6 +23,24 @@ app.add_middleware(
 # =========================
 evaluation_history: List[Dict] = []
 
+
+# =========================
+# IoU CALCULATION FUNCTION
+# =========================
+def calculate_iou(mesh):
+    """Calculate Intersection over Union using bounding box and mesh volume"""
+    bounds = mesh.bounds
+    bbox_volume = float(np.prod(bounds[1] - bounds[0]))
+    mesh_volume = float(mesh.volume) if hasattr(mesh, 'volume') else 0.0
+    
+    # Calculate IoU (intersection over union)
+    intersection = min(bbox_volume, mesh_volume)
+    union = bbox_volume + mesh_volume - intersection
+    
+    iou = intersection / union if union > 0 else 0.0
+    return round(iou, 4)
+
+
 # =========================
 # DETAILED METRICS FUNCTION
 # =========================
@@ -105,6 +123,9 @@ def evaluate_mesh(mesh):
     quality_score = compute_quality_score(
         normal_consistency, smoothness, is_watertight, edge_length_std, num_faces
     )
+    
+    # Calculate IoU score
+    iou_score = calculate_iou(mesh)
 
     # Latency
     latency = round(time.time() - start_time, 4)
@@ -121,6 +142,9 @@ def evaluate_mesh(mesh):
         "smoothness": round(smoothness, 6),
         "normal_consistency": round(normal_consistency, 4),
         "quality_score": quality_score,
+        
+        # IoU Score (NEW)
+        "iou_score": iou_score,
 
         # Geometry
         "surface_area": round(surface_area, 4),
@@ -231,3 +255,11 @@ async def clear_history():
 @app.get("/health")
 async def health():
     return {"status": "ok", "evaluations_count": len(evaluation_history)}
+
+
+# =========================
+# RUN THE SERVER
+# =========================
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
