@@ -1,28 +1,24 @@
-// src/components/ImageTo3DPage.jsx (simplified - remove BenchmarkDashboard)
 import React, { useState } from "react";
 import GeneratorHeader from "./GeneratorHeader";
 import ImageControlPanel from "./ImageControlPanel";
 import PreviewPanel from "./PreviewPanel";
 import GeneratorFooter from "./GeneratorFooter";
 import MetricsOverlay from "./MetricsOverlay";
-// Remove: import BenchmarkDashboard from "./BenchmarkDashboard";
 import "./GeneratorPage.css";
 
 export default function ImageTo3DPage() {
 
-  const SHAPE_API = "https://nonoptimistical-ascetically-xenia.ngrok-free.dev";
-  const TRIPO_API = "https://e4f1-213-173-108-219.ngrok-free.app";
-  const EVAL_API = "https://191b-106-202-47-105.ngrok-free.app";
+  const SHAPE_API = import.meta.env.VITE_SHAPE_API;
+  const TRIPO_API = import.meta.env.VITE_TRIPO_API;
+  const EVAL_API = import.meta.env.VITE_EVAL_API;
 
   const [image, setImage] = useState(null);
-  const [detailLevel, setDetailLevel] = useState("Med");
-  const [textureQuality, setTextureQuality] = useState("Standard");
+  const [textureQuality, setTextureQuality] = useState("Shap-E");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedModel, setGeneratedModel] = useState(null);
   const [metrics, setMetrics] = useState(null);
 
   const handleGenerate = async () => {
-    // ... (keep your existing generate logic)
     if (!image || !image.file) {
       alert("Please upload an image first.");
       return;
@@ -33,23 +29,26 @@ export default function ImageTo3DPage() {
     setMetrics(null);
 
     try {
-      if (textureQuality === "Standard") {
+      if (textureQuality === "Shap-E") {
         const formData = new FormData();
         formData.append("file", image.file);
 
         const response = await fetch(`${SHAPE_API}/generate`, {
           method: "POST",
           body: formData,
+          // Optional: add header if Shap-E API is also behind ngrok
+          // headers: { "ngrok-skip-browser-warning": "true" },
         });
 
         if (!response.ok) throw new Error("Shape-E generation failed");
 
         const blob = await response.blob();
+
         const JSZip = (await import("jszip")).default;
         const zip = await JSZip.loadAsync(blob);
-        const objFile = zip.file("model.obj");
 
-        if (!objFile) throw new Error("OBJ not found in ZIP");
+        const objFile = zip.file("model.obj") || zip.file("output_model.obj");
+        if (!objFile) throw new Error("OBJ file not found in ZIP");
 
         const objBlob = await objFile.async("blob");
         const objUrl = URL.createObjectURL(objBlob);
@@ -57,23 +56,11 @@ export default function ImageTo3DPage() {
         setGeneratedModel({
           previewUrl: objUrl,
           fileBlob: objBlob,
-          fileName: "shape_model.obj",
+          fileName: "model.obj",
           type: "obj",
         });
 
-        // Evaluate
-        // const evalForm = new FormData();
-        // evalForm.append("file", objBlob, "model.obj");
-
-        // const evalRes = await fetch(`${EVAL_API}/evaluate`, {
-        //   method: "POST",
-        //   body: evalForm,
-        // });
-
-        // const evalData = await evalRes.json();
-        // setMetrics(evalData);
-
-        // 🔥 Evaluate (safe)
+        // Evaluate Shap-E model (OBJ)
         try {
           const evalForm = new FormData();
           evalForm.append("file", objBlob, "model.obj");
@@ -81,20 +68,21 @@ export default function ImageTo3DPage() {
           const evalRes = await fetch(`${EVAL_API}/evaluate`, {
             method: "POST",
             body: evalForm,
+            headers: { "ngrok-skip-browser-warning": "true" },
           });
 
           if (evalRes.ok) {
             const evalData = await evalRes.json();
             setMetrics(evalData);
           } else {
-            console.warn("Evaluation failed");
+            console.warn("Shap-E evaluation failed");
           }
-        } catch (e) {
-          console.warn("Evaluation error:", e);
+        } catch (err) {
+          console.warn("Shap-E evaluation error:", err);
         }
       }
 
-      if (textureQuality === "4K") {
+      if (textureQuality === "TripoSR") {
         const formData = new FormData();
         formData.append("image", image.file);
 
@@ -113,22 +101,41 @@ export default function ImageTo3DPage() {
         const glbResponse = await fetch(glbUrl, {
           headers: { "ngrok-skip-browser-warning": "true" },
         });
-
         const glbBlob = await glbResponse.blob();
         const blobUrl = URL.createObjectURL(glbBlob);
 
         setGeneratedModel({
           previewUrl: blobUrl,
           fileBlob: glbBlob,
-          fileName: "tripo_model.glb",
+          fileName: "model.glb",
           type: "glb",
         });
 
-        setMetrics(null);
+        // Evaluate TripoSR model (GLB)
+        try {
+          const evalForm = new FormData();
+          evalForm.append("file", glbBlob, "model.glb");
+
+          const evalRes = await fetch(`${EVAL_API}/evaluate`, {
+            method: "POST",
+            body: evalForm,
+            headers: { "ngrok-skip-browser-warning": "true" },
+          });
+
+          if (evalRes.ok) {
+            const evalData = await evalRes.json();
+            setMetrics(evalData);
+          } else {
+            console.warn("TripoSR evaluation failed");
+          }
+        } catch (err) {
+          console.warn("TripoSR evaluation error:", err);
+        }
       }
+
     } catch (error) {
       console.error(error);
-      alert("Generation failed");
+      alert("Generation failed. Check console.");
     }
 
     setIsGenerating(false);
@@ -136,6 +143,7 @@ export default function ImageTo3DPage() {
 
   const handleDownload = () => {
     if (!generatedModel) return;
+
     const url = URL.createObjectURL(generatedModel.fileBlob);
     const a = document.createElement("a");
     a.href = url;
@@ -150,13 +158,11 @@ export default function ImageTo3DPage() {
 
       <main className="generator-main">
         <div className="container">
-
           <div className="generator-workspace">
+            {/* LEFT PANEL */}
             <ImageControlPanel
               image={image}
               setImage={setImage}
-              detailLevel={detailLevel}
-              setDetailLevel={setDetailLevel}
               textureQuality={textureQuality}
               setTextureQuality={setTextureQuality}
               onGenerate={handleGenerate}
@@ -164,7 +170,7 @@ export default function ImageTo3DPage() {
               isGenerating={isGenerating}
             />
 
-            {/* Preview + Floating Metrics */}
+            {/* RIGHT PANEL */}
             <div className="preview-wrapper">
               <PreviewPanel
                 generatedModel={generatedModel}
@@ -173,9 +179,6 @@ export default function ImageTo3DPage() {
               <MetricsOverlay metrics={metrics} />
             </div>
           </div>
-
-          {/* REMOVED: BenchmarkDashboard component */}
-
         </div>
       </main>
 

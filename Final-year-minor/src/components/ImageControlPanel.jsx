@@ -1,132 +1,3 @@
-// import React from "react";
-// import "./ControlPanel.css";
-
-// function ImageControlPanel({
-//   image,
-//   setImage,
-//   detailLevel,
-//   setDetailLevel,
-//   textureQuality,
-//   setTextureQuality,
-//   onGenerate,
-//   onDownload,
-//   isGenerating,
-// }) {
-
-//   const handleUpload = (e) => {
-//     const file = e.target.files[0];
-//     if (!file) return;
-
-//     const preview = URL.createObjectURL(file);
-
-//     setImage({
-//       file: file,
-//       preview: preview,
-//     });
-//   };
-
-//   return (
-//     <div className="control-panel">
-
-//       {/* IMAGE UPLOAD */}
-//       <div className="panel-section">
-//         <label className="section-title">Upload your image</label>
-
-//         <label className="upload-box">
-//           <input
-//             type="file"
-//             accept="image/*"
-//             hidden
-//             onChange={handleUpload}
-//           />
-
-//           {image ? (
-//             <img
-//               src={image.preview}
-//               alt="preview"
-//               className="upload-preview"
-//             />
-//           ) : (
-//             <>
-//               <div className="upload-icon">📷</div>
-//               <p>Click to upload image</p>
-//               <span>PNG, JPG supported</span>
-//             </>
-//           )}
-//         </label>
-//       </div>
-
-//       {/* DETAIL LEVEL */}
-//       <div className="panel-section">
-//         <h3 className="section-title">Detail Level</h3>
-
-//         <div className="toggle-group">
-//           {["Low", "Med", "High"].map((level) => (
-//             <button
-//               key={level}
-//               className={`toggle-btn ${
-//                 detailLevel === level ? "active" : ""
-//               }`}
-//               onClick={() => setDetailLevel(level)}
-//             >
-//               {level}
-//             </button>
-//           ))}
-//         </div>
-
-//         <div className="coming-soon">Coming soon</div>
-//       </div>
-
-//       {/* TEXTURE QUALITY */}
-//       <div className="panel-section">
-//         <h3 className="section-title">Texture Quality</h3>
-
-//         <div className="toggle-group">
-//           {["Standard", "4K"].map((quality) => (
-//             <button
-//               key={quality}
-//               className={`toggle-btn ${
-//                 textureQuality === quality ? "active" : ""
-//               }`}
-//               onClick={() => setTextureQuality(quality)}
-//             >
-//               {quality}
-//             </button>
-//           ))}
-//         </div>
-//       </div>
-
-//       {/* GENERATE */}
-//       <div className="panel-section">
-
-//         <button
-//           className="generate-btn"
-//           onClick={onGenerate}
-//           disabled={!image || isGenerating}
-//         >
-//           {isGenerating ? "Generating..." : "Generate Preview"}
-//         </button>
-
-//         <button
-//           className="download-btn"
-//           onClick={onDownload}
-//           disabled={!image}
-//         >
-//           Download Model
-//         </button>
-
-//         <div className="status-indicator">
-//           Estimated time: 1.2 min
-//         </div>
-
-//       </div>
-
-//     </div>
-//   );
-// }
-
-// export default ImageControlPanel;
-
 import React, { useState, useEffect } from "react";
 import "./ControlPanel.css";
 
@@ -141,10 +12,10 @@ function ImageControlPanel({
   onDownload,
   isGenerating,
 }) {
-
   const [autoMode, setAutoMode] = useState(false);
   const [internetSpeed, setInternetSpeed] = useState(0);
 
+  // 📷 Upload Handler
   const handleUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -157,12 +28,13 @@ function ImageControlPanel({
     });
   };
 
-  // 🌐 Speed detection
+  // 🌐 Internet Speed Detection
   const getInternetSpeed = async () => {
     const start = Date.now();
     try {
       await fetch("https://jsonplaceholder.typicode.com/posts");
       const duration = (Date.now() - start) / 1000;
+
       const speed = (500 * 1024 * 8) / duration / (1024 * 1024);
       return speed.toFixed(2);
     } catch {
@@ -170,29 +42,21 @@ function ImageControlPanel({
     }
   };
 
-  // useEffect(() => {
-  //   getInternetSpeed().then(setInternetSpeed);
-  // }, []);
+  useEffect(() => {
+    let interval;
 
-useEffect(() => {
-  let interval;
+    const fetchSpeed = async () => {
+      const speed = await getInternetSpeed();
+      setInternetSpeed(speed);
+    };
 
-  const fetchSpeed = async () => {
-    const speed = await getInternetSpeed();
-    setInternetSpeed(speed);
-  };
+    fetchSpeed();
+    interval = setInterval(fetchSpeed, 3000);
 
-  // Run once immediately
-  fetchSpeed();
+    return () => clearInterval(interval);
+  }, []);
 
-  // 🔥 Run every 5 seconds
-  interval = setInterval(fetchSpeed, 3000);
-
-  // Cleanup
-  return () => clearInterval(interval);
-}, []);
-
-  // 🔥 AUTO LOGIC
+  // ⚡ Auto Mode Logic
   const getAutoMode = () => {
     if (!image || !image.file) return "Fast Mode";
 
@@ -208,23 +72,34 @@ useEffect(() => {
     return sizeMB > 0.02 ? "High Quality Mode" : "Fast Mode";
   };
 
+  // 🔥 Sync texture safely using useEffect
+  useEffect(() => {
+    if (!autoMode) return;
+
+    const mode = getAutoMode();
+
+    if (mode === "High Quality Mode" && textureQuality !== "TripoSR") {
+      setTextureQuality("TripoSR");
+    }
+
+    if (mode === "Fast Mode" && textureQuality !== "Shap-E") {
+      setTextureQuality("Shap-E");
+    }
+  }, [autoMode, image, internetSpeed]);
+
+  // 🎯 Selected Mode
   let selectedMode = "Fast Mode";
 
   if (autoMode) {
     selectedMode = getAutoMode();
-
-    // 🔥 Sync texture quality automatically
-    if (selectedMode === "High Quality Mode" && textureQuality !== "4K") {
-      setTextureQuality("4K");
-    }
-    if (selectedMode === "Fast Mode" && textureQuality !== "Standard") {
-      setTextureQuality("Standard");
-    }
   } else {
     selectedMode =
-      textureQuality === "4K" ? "High Quality Mode" : "Fast Mode";
+      textureQuality === "TripoSR"
+        ? "High Quality Mode"
+        : "Fast Mode";
   }
 
+  // 🧠 Model Name
   const getModelName = () => {
     return selectedMode === "Fast Mode"
       ? "Shap-E ⚡"
@@ -234,26 +109,36 @@ useEffect(() => {
   return (
     <div className="control-panel">
 
-      {/* Upload */}
+      {/* 📷 IMAGE UPLOAD */}
       <div className="panel-section">
-        <label className="section-title">Upload Image</label>
+        <label className="section-title">Upload your image</label>
 
         <label className="upload-box">
-          <input type="file" hidden onChange={handleUpload} />
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleUpload}
+          />
 
           {image ? (
-            <img src={image.preview} className="upload-preview" />
+            <img
+              src={image.preview}
+              alt="preview"
+              className="upload-preview"
+            />
           ) : (
-            <div className="upload-placeholder">
-              📷 Click to upload
-            </div>
+            <>
+              <div className="upload-icon">📷</div>
+              <p>Click to upload image</p>
+              <span>PNG, JPG supported</span>
+            </>
           )}
         </label>
       </div>
 
-      {/* MODEL SELECTION CARD */}
+      {/* 🤖 MODEL CARD */}
       <div className="panel-section model-card">
-
         <div className="model-header">
           <h3>Model Selection</h3>
 
@@ -266,7 +151,6 @@ useEffect(() => {
         </div>
 
         <div className="model-info">
-
           <div className="info-row">
             <span>🤖 Auto</span>
             <span className={autoMode ? "green" : "gray"}>
@@ -292,20 +176,20 @@ useEffect(() => {
                 : `${internetSpeed} Mbps`}
             </span>
           </div>
-
         </div>
       </div>
 
-      {/* Texture */}
+      {/* 🎨 TEXTURE */}
       <div className="panel-section">
         <h3 className="section-title">Texture Quality</h3>
 
         <div className="toggle-group">
-          {["Standard", "4K"].map((q) => (
+          {["Shap-E", "TripoSR"].map((q) => (
             <button
               key={q}
-              className={`toggle-btn ${textureQuality === q ? "active" : ""
-                }`}
+              className={`toggle-btn ${
+                textureQuality === q ? "active" : ""
+              }`}
               disabled={autoMode}
               onClick={() => setTextureQuality(q)}
             >
@@ -315,9 +199,8 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* Generate */}
+      {/* 🚀 ACTIONS */}
       <div className="panel-section">
-
         <button
           className="generate-btn"
           onClick={onGenerate}
@@ -333,8 +216,10 @@ useEffect(() => {
         >
           Download Model
         </button>
-       
-       <div className="status-indicator">Estimated time: 1.2 min</div>
+
+        <div className="status-indicator">
+          Estimated time: 1.2 min
+        </div>
       </div>
     </div>
   );

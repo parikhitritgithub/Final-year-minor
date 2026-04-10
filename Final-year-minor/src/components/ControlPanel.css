@@ -1,5 +1,5 @@
 .control-panel {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(233, 226, 226, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 24px;
@@ -152,9 +152,7 @@
   100% { transform: rotate(360deg); }
 }
 
-.coming-soon{
-  color: white;
-}
+
 
 .image-upload {
   width: 100%;
@@ -193,6 +191,7 @@
 .upload-box p{
   color:white;
   font-size:14px;
+  
 }
 
 .upload-box span{
@@ -208,10 +207,14 @@
 }
 
 .model-card {
-  background: #111;
   padding: 15px;
   border-radius: 12px;
-  color: white;
+  color: rgb(19, 18, 18);
+}
+.model-card{
+  background: rgba(0, 0, 0, 0.3);
+
+  
 }
 
 .model-header {
@@ -232,7 +235,7 @@
 }
 
 .highlight {
-  color: #10b981;
+  color: #137e5b;
   font-weight: 600;
 }
 
@@ -255,13 +258,13 @@
 }
 
 .toggle-switch.active {
-  background: #10b981;
+  background: #4d0360;
 }
 
 .toggle-circle {
   width: 20px;
   height: 20px;
-  background: white;
+  background: red;
   position: absolute;
   top: 2px;
   left: 2px;
@@ -271,4 +274,8 @@
 
 .toggle-switch.active .toggle-circle {
   transform: translateX(21px);
+}
+
+.upload-box {
+  text-align: center;
 }

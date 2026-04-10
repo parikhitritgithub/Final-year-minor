@@ -4,18 +4,16 @@ import "./ControlPanel.css";
 function ControlPanel({
   prompt,
   setPrompt,
-  detailLevel,
-  setDetailLevel,
   textureQuality,
   setTextureQuality,
-  // format,
-  // setFormat,
   onGenerate,
   onDownload,
   isGenerating,
 }) {
   return (
     <div className="control-panel">
+
+      {/* 🧠 PROMPT */}
       <div className="panel-section">
         <label className="section-title">Enter your prompt</label>
         <textarea
@@ -27,40 +25,21 @@ function ControlPanel({
         />
       </div>
 
+      {/* ⚡ MODEL (ONLY SHAP-E) */}
       <div className="panel-section">
-        <h3 className="section-title">Detail Level</h3>
+        <h3 className="section-title">Model</h3>
+
         <div className="toggle-group">
-          {["Low", "Med", "High"].map((level) => (
-            <button
-              key={level}
-              className={`toggle-btn ${detailLevel === level ? "active" : ""}`}
-              onClick={() => setDetailLevel(level)}
-            >
-              {level}
-            </button>
-          ))}
+          <button
+            className="toggle-btn active"
+            onClick={() => setTextureQuality("Shap-E")}
+          >
+            Shap-E ⚡
+          </button>
         </div>
-        <div className="coming-soon">Coming soon</div>
       </div>
 
-      <div className="panel-section">
-        <h3 className="section-title">Texture Quality</h3>
-        <div className="toggle-group">
-          {["Standard", "4K"].map((quality) => (
-            <button
-              key={quality}
-              className={`toggle-btn ${
-                textureQuality === quality ? "active" : ""
-              }`}
-              onClick={() => setTextureQuality(quality)}
-            >
-              {quality}
-            </button>
-          ))}
-        </div>
-        <div className="coming-soon">Coming soon</div>
-      </div>
-
+      {/* 🚀 ACTIONS */}
       <div className="panel-section">
         <button
           className="generate-btn"
@@ -78,7 +57,9 @@ function ControlPanel({
           Download Model
         </button>
 
-        <div className="status-indicator">Estimated time: 1.2 min</div>
+        <div className="status-indicator">
+          Estimated time: 1.2 min
+        </div>
       </div>
     </div>
   );
